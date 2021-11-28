@@ -3,6 +3,8 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { ModuleFederationPlugin } = require('webpack').container;
+
 
 const config = {
   entry: './src/index.js',
@@ -87,20 +89,34 @@ const config = {
       templateContent: ({ htmlWebpackPlugin }) => '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>' + htmlWebpackPlugin.options.title + '</title></head><body><div id=\"app\"></div></body></html>',
       filename: 'index.html',
     }),
-    new MiniCssExtractPlugin()
-  ],
-  optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
-        }
+    new MiniCssExtractPlugin(),
+    new ModuleFederationPlugin({
+      name: 'home',
+      filename: "remoteEntry.js",
+      exposes: {
+        './App': './src/App',
+      },
+      shared: {
+        vue: { singleton: true, eager: true },
+        vuex: { singleton: true, eager: true },
+        "vue-router": { singleton: true, eager: true },
       }
-    }
-  },
+    }),
+  ],
+  // notice: code split must disable in application as remote!
+  //
+  // optimization: {
+  //   runtimeChunk: 'single',
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'all'
+  //       }
+  //     }
+  //   }
+  // },
   devServer: {
     hot: true,
     static: {
