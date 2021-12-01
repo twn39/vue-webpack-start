@@ -103,20 +103,6 @@ const config = {
       }
     }),
   ],
-  // notice: code split must disable in application as remote!
-  //
-  // optimization: {
-  //   runtimeChunk: 'single',
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       vendor: {
-  //         test: /[\\/]node_modules[\\/]/,
-  //         name: 'vendors',
-  //         chunks: 'all'
-  //       }
-  //     }
-  //   }
-  // },
   devServer: {
     hot: true,
     static: {
