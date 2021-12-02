@@ -28,17 +28,19 @@ const config = {
         ]
       },
       {
+        test: /\.m?js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "swc-loader"
+        }
+      },
+      {
         test: /\.css$/i,
         use: [
           'vue-style-loader',
           "style-loader",
           "css-loader"
         ],
-      },
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: /node_modules/
       },
       {
         test: /\.styl(us)?$/,
